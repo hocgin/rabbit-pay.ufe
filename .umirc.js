@@ -6,23 +6,21 @@ export default defineConfig({
   antd: {},
   dva: {},
   outputPath: './dist',
-  // exportStatic: {
-  //   htmlSuffix: true,
-  //   dynamicRoot: true,
-  // },
-  // proxy: {
-  //   '/chaos': {
-  //     'target': 'http://jsonplaceholder.typicode.com/',
-  //     'changeOrigin': true,
-  //     'pathRewrite': { '^/chaos': '' },
-  //   },
-  // },
+  proxy: {
+    '/api': {
+      // target: 'https://api-dev.hocgin.top/',
+      target: 'http://127.0.0.1:20001/',
+      changeOrigin: true,
+      pathRewrite: { '^/api': '' },
+    },
+  },
   routes: [
     {
       path: '/',
       component: '@/layouts/index',
       routes: [
         { path: '/', component: '@/pages/index' },
+        { path: '/cashier', component: '@/pages/cashier/index' },
       ],
     },
   ],
