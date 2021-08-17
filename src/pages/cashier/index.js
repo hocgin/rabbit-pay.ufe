@@ -3,7 +3,7 @@ import styles from './index.less';
 import CashierModel from '@/models/cashier';
 import { dispatchType } from '@/utils/model-utils';
 import { connect } from 'dva';
-import { Button, Descriptions, Divider, Empty, Radio, Space, Statistic } from 'antd';
+import { Button, Descriptions, Divider, Empty, message, Radio, Space, Statistic } from 'antd';
 
 let ci = null;
 
@@ -76,9 +76,23 @@ class index extends React.Component {
     let { payType } = this.state;
     $goPay({
       payload: { tradeOrderId: cashier?.tradeOrderId, paySceneId: cashier?.paySceneId, payType: payType },
-      callback: null,
+      callback: this.handlePay,
     });
   };
+
+  handlePay = ({ data }) => {
+    let type = data?.type;
+    switch (type) {
+      case 'redirect': {
+        window.location.href = data?.redirect?.value;
+        break;
+      }
+      default: {
+        message.error(`暂不支持:${type}`);
+      }
+    }
+  };
+
 
   startInterval = () => {
     clearInterval(ci);
