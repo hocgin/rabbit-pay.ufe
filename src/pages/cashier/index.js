@@ -79,7 +79,13 @@ class index extends React.Component {
   };
 
   onCheckPayResult = () => {
-
+    let { cashier, u } = this.props;
+    if (cashier?.status !== 'processing') {
+      history.push({
+        pathname: '/cashier/result',
+        query: { u: u },
+      });
+    }
   };
 
 }

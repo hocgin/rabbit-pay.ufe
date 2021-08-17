@@ -22,12 +22,6 @@ export default {
       if (UiUtils.showErrorMessageIfExits(result)) {
         let data = result.data;
         yield put({ type: [FILL_DETAIL], payload: data });
-        if (data?.status !== 'processing') {
-          history.push({
-            pathname: '/cashier/result',
-            query: { u: payload?.u },
-          });
-        }
       }
     },
     * goPay({ payload = {}, callback }, { call, put }) {
