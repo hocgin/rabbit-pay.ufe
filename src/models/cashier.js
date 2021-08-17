@@ -17,41 +17,27 @@ export default {
   namespace: 'cashier',
   state: initState,
   effects: {
-    * complete({ payload, callback }, { call, put }) {
-      let result = {};//yield ProjectApi.complete(payload);
+    * getCashier({ payload, callback }, { call, put }) {
+      let result = yield CashierApi.getCashier(payload);
       if (UiUtils.showErrorMessageIfExits(result)) {
-        yield put({ type: [FILL_COMPLETE], payload: result.data });
-        if (callback) callback(result);
+        let data = result.data;
+        yield put({ type: [FILL_DETAIL], payload: data });
+        if (data?.status !== 'processing') {
+          history.push({
+            pathname: '/cashier/result',
+            query: { u: payload?.u },
+          });
+        }
       }
     },
-    * getOne({ payload, callback }, { call, put }) {
-      let result = yield CashierApi.getOne(payload);
-      if (UiUtils.showErrorMessageIfExits(result)) {
-        yield put({ type: [FILL_DETAIL], payload: result.data });
-        if (callback) callback(result);
-      }
-    },
-    * insertOne({ payload = {}, callback }, { call, put }) {
-      let result = {}; // yield AuthorityApi.insert(payload);
-      if (UiUtils.showErrorMessageIfExits(result)) {
-        if (callback) callback(result);
-      }
-    },
-    * updateOne({ payload = {}, callback }, { call, put }) {
-      let result = {}; // yield AuthorityApi.insert(payload);
+    * goPay({ payload = {}, callback }, { call, put }) {
+      let result = yield CashierApi.goPay(payload);
       if (UiUtils.showErrorMessageIfExits(result)) {
         if (callback) callback(result);
       }
     },
-    * paging({ payload = {}, callback }, { call, put }) {
-      let result = {}; // yield AuthorityApi.insert(payload);
-      if (UiUtils.showErrorMessageIfExits(result)) {
-        yield put({ type: FILL_PAGING, payload: result.data });
-        if (callback) callback(result);
-      }
-    },
-    * delete({ payload = {}, callback }, { call, put }) {
-      let result = {}; // yield AuthorityApi.insert(payload);
+    * closeTrade({ payload = {}, callback }, { call, put }) {
+      let result = yield CashierApi.closeTrade(payload);
       if (UiUtils.showErrorMessageIfExits(result)) {
         if (callback) callback(result);
       }
@@ -71,10 +57,8 @@ export default {
   subscriptions: {
     setup({ dispatch, history }, done) {
       return history.listen(({ pathname, search }) => {
-        console.log('search', search);
-        if (pathToRegexp('/cashier').test(pathname)) {
-          let { u } = qs.parse(search);
-          dispatch({ type: 'getOne', payload: { u } });
+        if (pathToRegexp('/cashier').test(pathname) || pathToRegexp('/cashier/result').test(pathname)) {
+          dispatch({ type: 'getCashier', payload: { ...qs.parse(search) } });
         }
       });
     },

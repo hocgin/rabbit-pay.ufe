@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './index.less';
 import AppsModel from '@/models/apps';
 import { dispatchType } from '@/utils/model-utils';
+import { connect } from 'dva';
 
 @connect(({ global, apps, loading, ...rest }) => {
   return {

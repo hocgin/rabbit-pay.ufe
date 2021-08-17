@@ -2,45 +2,25 @@ import request from '@/utils/request';
 import { stringify } from 'query-string';
 
 export default class CashierApi {
-  static getOne({ id, ...payload }) {
+  static getCashier({ ...payload }) {
     let queryString = stringify(payload);
     return request(`/bmw/cashier?${queryString}`, {
       method: 'GET',
     });
   }
 
-  static paging(payload) {
-    return request(`/ums/user-group/_paging`, {
+  static goPay(payload) {
+    return request(`/bmw/go-pay`, {
       method: 'POST',
       body: { ...payload },
     });
   }
 
-  static insert(payload) {
-    return request(`/ums/user-group`, {
+  static closeTrade(payload) {
+    return request(`/bmw/close-trade`, {
       method: 'POST',
       body: { ...payload },
     });
   }
 
-  static update({ id, ...payload }) {
-    return request(`/ums/user-group/${id}`, {
-      method: 'PUT',
-      body: { ...payload },
-    });
-  }
-
-  static delete({ id, ...payload }) {
-    let queryString = stringify(payload);
-    return request(`/ums/user-group/${id}?${queryString}`, {
-      method: 'DELETE',
-    });
-  }
-
-  static complete(payload = {}) {
-    return request(`/ums/user-group/_complete`, {
-      method: 'POST',
-      body: { ...payload },
-    });
-  }
 }
