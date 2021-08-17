@@ -5,6 +5,8 @@ import { dispatchType } from '@/utils/model-utils';
 import { connect } from 'dva';
 import { Button, Descriptions, Divider, Empty, Radio, Space, Statistic } from 'antd';
 
+let ci = null;
+
 @connect(({ global, cashier, loading, ...rest }) => {
   return {
     cashier: cashier?.detail,
@@ -23,7 +25,7 @@ class index extends React.Component {
   };
 
   componentDidMount() {
-    let { $getCashier } = this.props;
+    this.startInterval();
   }
 
   render() {
@@ -78,14 +80,17 @@ class index extends React.Component {
     });
   };
 
-  onCheckPayResult = () => {
-    let { cashier, u } = this.props;
-    if (cashier?.status !== 'processing') {
-      history.push({
-        pathname: '/cashier/result',
-        query: { u: u },
-      });
-    }
+  startInterval = () => {
+    clearInterval(ci);
+    ci = setInterval(() => {
+      let { cashier, location: { query } } = this.props;
+      if (cashier?.status !== 'processing') {
+        history.push({
+          pathname: '/cashier/result',
+          query: { ...query },
+        });
+      }
+    }, 1000);
   };
 
 }
