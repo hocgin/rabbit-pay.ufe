@@ -3,7 +3,7 @@ import styles from './index.less';
 import CashierModel from '@/models/cashier';
 import { dispatchType } from '@/utils/model-utils';
 import { connect } from 'dva';
-import { Button, Descriptions, Divider, Empty, message, Radio, Space, Statistic } from 'antd';
+import { Avatar, Button, Descriptions, Divider, Empty, message, Modal, Radio, Space, Statistic } from 'antd';
 
 let ci = null;
 
@@ -85,6 +85,13 @@ class index extends React.Component {
     switch (type) {
       case 'redirect': {
         window.location.href = data?.redirect?.value;
+        break;
+      }
+      case 'qrCode': {
+        Modal.info({
+          title: '扫码支付',
+          content: (<Avatar size={120} src={`data?.qrCode`} />),
+        });
         break;
       }
       default: {
