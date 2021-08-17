@@ -3,6 +3,7 @@ import styles from './index.less';
 import CashierModel from '@/models/cashier';
 import { dispatchType } from '@/utils/model-utils';
 import { connect } from 'dva';
+import { history } from 'umi';
 import { Avatar, Button, Descriptions, Divider, Empty, message, Modal, Radio, Space, Statistic } from 'antd';
 
 let ci = null;
@@ -26,6 +27,10 @@ class index extends React.Component {
 
   componentDidMount() {
     this.startInterval();
+  }
+
+  componentWillUnmount() {
+    clearInterval(ci);
   }
 
   render() {
@@ -84,13 +89,13 @@ class index extends React.Component {
     let type = data?.type;
     switch (type) {
       case 'redirect': {
-        window.location.href = data?.redirect?.value;
+        window.location.href = data?.redirect;
         break;
       }
       case 'qrCode': {
         Modal.info({
           title: '扫码支付',
-          content: (<Avatar size={120} src={`data?.qrCode`} />),
+          content: (<div className={styles.qrcode}><Avatar size={140} shape='square' src={data?.qrCode} /></div>),
         });
         break;
       }

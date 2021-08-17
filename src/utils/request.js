@@ -11,6 +11,17 @@ export default function Request(
     credentials: 'include',
   };
   const newOptions = { ...defaultOptions, ...options };
+  newOptions.headers = {
+    'X-Page-Url': window.location.href,
+    'X-Requested-With': 'XMLHttpRequest',
+    'Content-Type': 'application/json; charset=UTF-8',
+    'Origin': url,
+    ...newOptions.headers,
+  };
+
+  if (Config.isDev()) {
+    newOptions.headers['X-Username'] = 'hocgin';
+  }
 
   if (
     newOptions.method === 'POST' ||
