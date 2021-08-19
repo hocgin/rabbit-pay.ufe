@@ -4,7 +4,7 @@ import CashierModel from '@/models/cashier';
 import { dispatchType } from '@/utils/model-utils';
 import { connect } from 'dva';
 import { history } from 'umi';
-import { Avatar, Button, Descriptions, Divider, Empty, message, Modal, Radio, Space, Statistic } from 'antd';
+import { Avatar, Button, Descriptions, Divider, Empty, message, Modal, Radio, Space, Spin, Statistic } from 'antd';
 
 let ci = null;
 
@@ -36,6 +36,9 @@ class index extends React.Component {
   render() {
     let { cashier, isGetCashierLoading, isGoPayLoading, isCloseTradeLoading } = this.props;
     let payTypes = cashier?.payTypes || [];
+    if (isGetCashierLoading) {
+      return (<Spin size='large' />);
+    }
 
     return (<div className={styles.page}>
       {/* LOGO */}

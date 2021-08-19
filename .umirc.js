@@ -19,7 +19,6 @@ export default defineConfig({
       path: '/',
       component: '@/layouts/index',
       routes: [
-        { path: '/', component: '@/pages/index' },
         { path: '/cashier', component: '@/pages/cashier/index' },
         { path: '/cashier/result', component: '@/pages/cashier/result/index' },
       ],
