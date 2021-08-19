@@ -28,6 +28,10 @@ export default class Config {
     return process.env.NODE_ENV === 'development';
   }
 
+  static getSsoServerUrl() {
+    return ssoServerUrl;
+  }
+
   static getBaseUrl() {
     return baseUrl;
   }

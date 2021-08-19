@@ -82,10 +82,14 @@ export default function Request(
     .then(response => cachedSave(response, hashcode))
     // 响应状态检查
     .then((response) => {
-      if (Config.isDev()) {
-        console.log(`${response.status}:[请求地址]:${response.url}`);
+
+      if (response.status === 401) {
+        response.json().then(({ redirectUrl }) => {
+          window.location.href = `${Config.getSsoServerUrl()}?redirectUrl=${redirectUrl ?? window.location.href}`;
+        });
       }
-      if (response.status >= 200 && response.status < 500) {
+
+      if (response.status >= 200 && response.status <= 500) {
         return response;
       }
 
