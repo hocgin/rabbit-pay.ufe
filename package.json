@@ -15,7 +15,7 @@
     "classnames": "latest",
     "dva": "^2.6.0-beta.21",
     "hash.js": "latest",
-    "moment": "latest",
+    "moment": "^2.29.1",
     "path-to-regexp": "^6.2.0",
     "prop-types": "^15.7.2",
     "query-string": "latest",

@@ -4,6 +4,7 @@ import CashierModel from '@/models/cashier';
 import { dispatchType } from '@/utils/model-utils';
 import { connect } from 'dva';
 import { history } from 'umi';
+import moment from 'moment';
 import { Avatar, Button, Descriptions, Divider, Empty, message, Modal, Radio, Space, Spin, Statistic } from 'antd';
 
 let ci = null;
@@ -36,36 +37,45 @@ class index extends React.Component {
   render() {
     let { cashier, isGetCashierLoading, isGoPayLoading, isCloseTradeLoading } = this.props;
     let payTypes = cashier?.payTypes || [];
-    if (isGetCashierLoading) {
-      return (<Spin size='large' />);
-    }
-
     return (<div className={styles.page}>
       {/* LOGO */}
       <div className={styles.cashier}>
-        {cashier ? (<>
-          {/* 交易单详情 */}
-          <Divider orientation='left'>交易单详情</Divider>
-          <Descriptions column={2}>
-            <Descriptions.Item label='交易单号'>{cashier?.outTradeNo}</Descriptions.Item>
-            <Descriptions.Item label='订单金额'>{cashier?.tradeAmt}</Descriptions.Item>
-            <Descriptions.Item label='收款方'>{cashier?.accessMchName}</Descriptions.Item>
-          </Descriptions>
-          {/* 支付方式 */}
-          <Divider orientation='left'>支付方式</Divider>
-          <Radio.Group defaultValue={payTypes[0]?.payType} onChange={this.onChangePayType}>
-            <Space direction='vertical'>
-              {payTypes.map(({ payType, title = '未设置' }) => (<Radio value={`${payType}`}>{title}</Radio>))}
-            </Space>
-          </Radio.Group><br />
-          {/* 操作按钮 */}
-          <Divider />
-          <div className={styles.toolbar}>
-            <Button type='text' loading={isCloseTradeLoading} onClick={this.onClickCloseTrade}>取消交易</Button>
-            <Divider type='vertical' />
-            <Button type='primary' loading={isGoPayLoading} onClick={this.onClickGoPay}>确认付款</Button>
-          </div>
-        </>) : (<Empty description={'单据不存在或已过期'} />)}
+        {isGetCashierLoading ? (<div className={styles.loading}><Spin size='large' /></div>)
+          : (cashier ? (<>
+            {/* 交易单详情 */}
+            <Divider orientation='left'>订单详情</Divider>
+            <Descriptions column={2}>
+              <Descriptions.Item>
+                <Statistic title='交易单号' value={cashier?.outTradeNo} />
+              </Descriptions.Item>
+              <Descriptions.Item>
+                <Statistic title='收款方' value={cashier?.accessMchName} />
+              </Descriptions.Item>
+              <Descriptions.Item>
+                <Statistic title='订单金额 (元)' value={cashier?.tradeAmt} precision={2} />
+              </Descriptions.Item>
+              <Descriptions.Item>
+                <Statistic.Countdown title='支付剩余时间' format='Y 年 D 天 H 时 m 分 s 秒'
+                                     value={moment(`${cashier?.planCloseAt}`).unix() * 1000} />
+              </Descriptions.Item>
+            </Descriptions>
+            {/* 支付方式 */}
+            <Divider orientation='left'>支付方式</Divider>
+            <Radio.Group onChange={this.onChangePayType}>
+              <Space direction='vertical'>
+                {payTypes.map(({ payType, title = '未设置' }) => (
+                  <Radio key={`${payType}`} value={`${payType}`}>{title}</Radio>))}
+              </Space>
+            </Radio.Group><br />
+            {/* 操作按钮 */}
+            <Divider />
+            <div className={styles.toolbar}>
+              <Button type='text' loading={isCloseTradeLoading} onClick={this.onClickCloseTrade}>取消交易</Button>
+              <Divider type='vertical' />
+              <Button type='primary' loading={isGoPayLoading} onClick={this.onClickGoPay}>确认付款</Button>
+            </div>
+          </>) : (<Empty description={'单据不存在或已过期'} />))
+        }
       </div>
     </div>);
   }
