@@ -2,7 +2,7 @@
 import { defineConfig } from 'umi';
 
 export default defineConfig({
-  title: 'title',
+  title: '收银台',
   antd: {},
   dva: {},
   outputPath: './dist',

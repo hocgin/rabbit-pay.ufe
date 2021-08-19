@@ -53,6 +53,8 @@ export default {
       return history.listen(({ pathname, search }) => {
         if (pathToRegexp('/cashier').test(pathname) || pathToRegexp('/cashier/result').test(pathname)) {
           dispatch({ type: 'getCashier', payload: { ...qs.parse(search) } });
+        } else {
+          window.location.href = 'https://wwww.hocgin.top';
         }
       });
     },

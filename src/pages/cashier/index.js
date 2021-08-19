@@ -105,7 +105,6 @@ class index extends React.Component {
     }
   };
 
-
   startInterval = () => {
     clearInterval(ci);
     ci = setInterval(() => {

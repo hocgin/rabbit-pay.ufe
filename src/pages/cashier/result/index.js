@@ -6,6 +6,7 @@ import { Button, Result, message, Empty } from 'antd';
 import CashierModel from '@/models/cashier';
 import Paragraph from 'antd/es/typography/Paragraph';
 import Text from 'antd/es/typography/Text';
+import { history } from 'umi';
 
 @connect(({ global, cashier, loading, ...rest }) => {
   return {
@@ -24,21 +25,34 @@ class index extends React.Component {
     let status = { 'processing': 'info', 'payed': 'success', 'cancelled': 'info', 'closed': 'info' }[cashier?.status];
     let title = { 'processing': '进行中', 'payed': '支付成功', 'cancelled': '已取消', 'closed': '已关闭' }[cashier?.status];
     let isClosed = ['cancelled', 'closed'].includes(cashier?.status);
+    let isProcessing = ['processing'].includes(cashier?.status);
+
+    let backBtn = (<Button type='primary' onClick={this.onClickBack}>返回商户</Button>);
+    if (isProcessing) {
+      backBtn = (<Button type='primary' onClick={this.onClickBackPayPage}>继续支付</Button>);
+    }
     return (<div className={styles.page}>
       <div className={styles.result}>
         {cashier ? (<Result status={status} title={title} subTitle={`交易单号: ${cashier?.outTradeNo}`}
-                            extra={[<Button type='primary' onClick={this.onClickBack}>返回商户</Button>,
-                              <Button onClick={this.onClickClose}>关闭窗口</Button>]}>
+                            extra={[backBtn, <Button onClick={this.onClickClose}>关闭窗口</Button>]}>
           {isClosed && (<div className='desc'>
             <Paragraph>
               <Text strong style={{ fontSize: 16 }}>关单原因: </Text>
             </Paragraph>
-            <Paragraph> {cashier?.reason} </Paragraph>
+            <Paragraph> {cashier?.reason || '系统关单'} </Paragraph>
           </div>)}
-        </Result>) : (<Empty description={'单据不存在或已过期'}/>)}
+        </Result>) : (<Empty description={'单据不存在或已过期'} />)}
       </div>
     </div>);
   }
+
+  onClickBackPayPage = () => {
+    let { location: { query } } = this.props;
+    history.push({
+      pathname: '/cashier',
+      query: { ...query },
+    });
+  };
 
   onClickBack = () => {
     let { cashier } = this.props;
