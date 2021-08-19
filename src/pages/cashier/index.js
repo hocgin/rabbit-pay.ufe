@@ -52,7 +52,7 @@ class index extends React.Component {
           <Divider orientation='left'>支付方式</Divider>
           <Radio.Group defaultValue={payTypes[0]?.payType} onChange={this.onChangePayType}>
             <Space direction='vertical'>
-              {payTypes.map(({ payType, title = '未设置' }) => (<Radio value={`${payType}`}>{title}({payType})</Radio>))}
+              {payTypes.map(({ payType, title = '未设置' }) => (<Radio value={`${payType}`}>{title}</Radio>))}
             </Space>
           </Radio.Group><br />
           {/* 操作按钮 */}
