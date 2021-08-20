@@ -11,6 +11,7 @@
     "precommit": "lint-staged"
   },
   "dependencies": {
+    "@hocgin/ui": "^4.0.5",
     "antd": "^4.8.2",
     "classnames": "latest",
     "dva": "^2.6.0-beta.21",

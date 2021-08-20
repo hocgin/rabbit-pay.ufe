@@ -1,9 +1,12 @@
 import styles from './index.less';
+import { Footer, Header } from '@hocgin/ui';
 
 function BasicLayout(props) {
   return (<div className={styles.normal}>
-      {props.children}
-    </div>);
+    <Header />
+    {props.children}
+    <Footer />
+  </div>);
 }
 
 export default BasicLayout;
