@@ -3,9 +3,11 @@ import { Footer, Header } from '@hocgin/ui';
 
 function BasicLayout(props) {
   return (<div className={styles.normal}>
-    <Header />
-    {props.children}
-    <Footer />
+    <div className={styles.page}>
+      <Header />
+      {props.children}
+      <Footer />
+    </div>
   </div>);
 }
 
