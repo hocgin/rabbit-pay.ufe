@@ -9,11 +9,12 @@ import TitleSpec from '@/components/TitleSpec';
 import bmwService from '@/services/bmw';
 import { Spin, Avatar, Row, Col, Space, Button, Modal, message } from 'antd';
 import classnames from 'classnames';
-import { TrophyOutlined } from '@ant-design/icons';
+import { TrophyOutlined, PayCircleOutlined } from '@ant-design/icons';
 
 const RadioOption: React.FC<{ src?: string, title?: string, checked?: boolean, onClick: any }> = ({
-                                                                                                    src = 'https://cloudpayweb-fat7.orangebank.com.cn/pc/images/bank-logo-map/PAB.png',
-                                                                                                    title = '支付宝',
+                                                                                                    src =
+                                                                                                      <PayCircleOutlined className={styles.payIcon} />,
+                                                                                                    title,
                                                                                                     checked = false,
                                                                                                     onClick,
                                                                                                   }, ref) => {
@@ -35,7 +36,7 @@ const Index: React.FC<{}> = (props, ref) => {
     manual: true,
     onSuccess: (data: any) => {
       if (data?.status !== 'processing') {
-        // history.push({ pathname: '/result', query: { ...params } });
+        history.push({ pathname: '/result', query: { ...params } });
       }
       setData(data);
     },
@@ -66,13 +67,13 @@ const Index: React.FC<{}> = (props, ref) => {
   let closeTrade = useRequest(bmwService.closeTrade, { manual: true });
 
   useEffect(() => {
-    // getCashier.run({ u: params?.u });
+    getCashier.runAsync({ u: params?.u });
     let interval = setInterval(() => getCashier.run({ u: params?.u }), 2.5 * 1000);
     return () => clearInterval(interval);
   }, [params?.u]);
 
   if (!data && getCashier?.loading) {
-    return <Spin />;
+    return <div className={classnames(styles.cashier, styles.center)}><Spin /></div>;
   }
   let payTypes = (data?.payTypes || []).map((item: any, index: number) => ({
     ...item,

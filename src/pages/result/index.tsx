@@ -7,6 +7,7 @@ import useUrlState from '@ahooksjs/use-url-state';
 import { Button, Empty, message, Result, Spin } from 'antd';
 import Paragraph from 'antd/es/typography/Paragraph';
 import Text from 'antd/es/typography/Text';
+import classnames from 'classnames';
 
 const Index: React.FC<{}> = (props, ref) => {
   const [params, setParams] = useUrlState({ u: undefined });
@@ -28,12 +29,12 @@ const Index: React.FC<{}> = (props, ref) => {
   });
 
   useEffect(() => {
-    getCashier.run({ u: params?.u });
+    getCashier.runAsync({ u: params?.u });
     let interval = setInterval(() => getCashier.run({ u: params?.u }), 2.5 * 1000);
     return () => clearInterval(interval);
   }, [params?.u]);
   if (!data && getCashier?.loading) {
-    return <Spin />;
+    return <div className={classnames(styles.page, styles.center)}><Spin /></div>;
   }
   let statusArr: any = { 'processing': 'info', 'payed': 'success', 'cancelled': 'info', 'closed': 'info' };
   let titleArr: any = { 'processing': '进行中', 'payed': '支付成功', 'cancelled': '已取消', 'closed': '已关闭' };

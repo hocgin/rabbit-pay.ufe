@@ -3,6 +3,18 @@
 .cashier {
   flex: 1 1;
   margin: 0 10px;
+
+  &.center {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.payIcon {
+  color: #000;
+
 }
 
 .box() {
@@ -76,7 +88,11 @@
   &.checked {
     border: 1px solid @primary-color;
     box-shadow: 0 1px 1px 1.5px rgba(32, 33, 36, 6%);
-    background-color: rgba(32, 33, 36, 3%);
+    background-color: rgba(@primary-color, 3%);
+
+    .image {
+      color: rgba(@primary-color, 3%) !important;
+    }
   }
 
   .image {
