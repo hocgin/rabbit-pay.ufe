@@ -44,7 +44,7 @@ jobs:
       - name: Install npm dependencies
         run: npm install
       - name: Run build
-        run: npm run build
+        run: npm run build:cdn
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@main
         env:
@@ -55,3 +55,12 @@ jobs:
           TARGET: ${{ secrets.REMOTE_TARGET }}
           SOURCE: "dist/"
           EXCLUDE: "/dist/, /node_modules/"
+      - uses: hocgin/action-qiniu-upload@master
+        with:
+          access_key: ${{ secrets.QINIU_ACCESS_KEY }}
+          secret_key: ${{ secrets.QINIU_SECRET_KEY }}
+          bucket: ${{ secrets.QINIU_BUCKET }}
+          source_dir: 'dist'
+          dest_dir: ${{github.event.repository.name}}
+          ignore_source_map: true
+          exclude: "dist/index.html"
