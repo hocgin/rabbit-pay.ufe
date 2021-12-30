@@ -29,8 +29,10 @@ const Index: React.FC<{}> = (props, ref) => {
   });
 
   useEffect(() => {
-    getCashier.runAsync({ u: params?.u });
-    let interval = setInterval(() => getCashier.run({ u: params?.u }), 2.5 * 1000);
+    let u = params?.u;
+    if (!u) return;
+    getCashier.runAsync({ u });
+    let interval = setInterval(() => getCashier.run({ u }), 2.5 * 1000);
     return () => clearInterval(interval);
   }, [params?.u]);
   if (!data && getCashier?.loading) {

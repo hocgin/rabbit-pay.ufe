@@ -13,7 +13,8 @@ import { TrophyOutlined, PayCircleOutlined } from '@ant-design/icons';
 
 const RadioOption: React.FC<{ src?: string, title?: string, checked?: boolean, onClick: any }> = ({
                                                                                                     src =
-                                                                                                      <PayCircleOutlined className={styles.payIcon} />,
+                                                                                                      <PayCircleOutlined
+                                                                                                        className={styles.payIcon} />,
                                                                                                     title,
                                                                                                     checked = false,
                                                                                                     onClick,
@@ -64,11 +65,17 @@ const Index: React.FC<{}> = (props, ref) => {
       }
     },
   });
-  let closeTrade = useRequest(bmwService.closeTrade, { manual: true });
+  let closeTrade = useRequest(bmwService.closeTrade, {
+    manual: true, onSuccess: () => {
+      message.success('关单成功');
+    },
+  });
 
   useEffect(() => {
-    getCashier.runAsync({ u: params?.u });
-    let interval = setInterval(() => getCashier.run({ u: params?.u }), 2.5 * 1000);
+    let u = params?.u;
+    if (!u) return;
+    getCashier.runAsync({ u });
+    let interval = setInterval(() => getCashier.run({ u }), 2.5 * 1000);
     return () => clearInterval(interval);
   }, [params?.u]);
 
