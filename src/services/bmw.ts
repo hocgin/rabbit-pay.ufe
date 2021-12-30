@@ -7,14 +7,19 @@ export default class {
   static getCashier({ id, ...payload }: any) {
     let queryString = stringify(payload);
     return useGet(`/api/bmw/cashier?${queryString}`, {})
+      .then(Utils.Struct.thenShowErrorIfExits)
       .then(Utils.Struct.thenData);
   }
 
   static goPay({ ...payload }: any) {
-    return usePost(`/api/bmw/go-pay`, { data: { ...payload } });
+    return usePost(`/api/bmw/go-pay`, { data: { ...payload } })
+      .then(Utils.Struct.thenShowErrorIfExits)
+      .then(Utils.Struct.thenData);
   }
 
   static closeTrade(payload: any) {
-    return usePost(`/api/bmw/close-trade`, { data: { ...payload } });
+    return usePost(`/api/bmw/close-trade`, { data: { ...payload } })
+      .then(Utils.Struct.thenShowErrorIfExits)
+      .then(Utils.Struct.thenData);
   }
 }
