@@ -8,7 +8,7 @@ import zhCN from 'antd/lib/locale/zh_CN';
 const BasicLayout: React.FC<{}> = (props, ref) => {
   return (<ConfigProvider locale={zhCN}>
     <div className={styles.normal}>
-      <Header title='收银台' />
+      <Header />
       {props.children}
       <Footer />
     </div>

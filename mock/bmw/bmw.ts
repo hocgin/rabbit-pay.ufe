@@ -23,7 +23,7 @@ export default {
       'accessMchId|+1': 1,
       'paySceneId|+1': 1,
       // 图片
-      imageUrl: Mock.Random.image('100x100'),
+      // imageUrl: Mock.Random.image('100x100'),
       // 订单标题
       orderTitle: '@string(15)',
       // 订单描述

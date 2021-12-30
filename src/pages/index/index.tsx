@@ -9,6 +9,7 @@ import TitleSpec from '@/components/TitleSpec';
 import bmwService from '@/services/bmw';
 import { Spin, Avatar, Row, Col, Space, Button, Modal, message } from 'antd';
 import classnames from 'classnames';
+import { TrophyOutlined } from '@ant-design/icons';
 
 const RadioOption: React.FC<{ src?: string, title?: string, checked?: boolean, onClick: any }> = ({
                                                                                                     src = 'https://cloudpayweb-fat7.orangebank.com.cn/pc/images/bank-logo-map/PAB.png',
@@ -94,7 +95,9 @@ const Index: React.FC<{}> = (props, ref) => {
   return (<div className={styles.cashier}>
     <div className={styles.info}>
       <div className={styles.head}>
-        <div className={styles.image}><Avatar shape={'square'} size={100} src={data?.imageUrl} /></div>
+        <div className={styles.image}>
+          <Avatar shape={'square'} size={100} src={data?.imageUrl} icon={<TrophyOutlined />} />
+        </div>
         <div className={styles.order}>
           <TitleSpec title='商户名称'>{data?.accessMchName}</TitleSpec>
           <TitleSpec title='商品名称'>{data?.orderTitle}</TitleSpec>
