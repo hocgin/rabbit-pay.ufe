@@ -32,7 +32,7 @@ const Index: React.FC<{}> = (props, ref) => {
     let u = params?.u;
     if (!u) return;
     getCashier.runAsync({ u });
-    let interval = setInterval(() => getCashier.run({ u }), 2.5 * 1000);
+    let interval = setInterval(() => data && getCashier.run({ u }), 2.5 * 1000);
     return () => clearInterval(interval);
   }, [params?.u]);
   if (!data && getCashier?.loading) {

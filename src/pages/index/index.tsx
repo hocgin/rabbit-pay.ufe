@@ -36,6 +36,9 @@ const Index: React.FC<{}> = (props, ref) => {
   let getCashier = useRequest(bmwService.getCashier, {
     manual: true,
     onSuccess: (data: any) => {
+      if (!data) {
+        history.push({ pathname: '/404', query: { ...params } });
+      }
       if (data?.status !== 'processing') {
         history.push({ pathname: '/result', query: { ...params } });
       }
@@ -66,16 +69,14 @@ const Index: React.FC<{}> = (props, ref) => {
     },
   });
   let closeTrade = useRequest(bmwService.closeTrade, {
-    manual: true, onSuccess: () => {
-      message.success('关单成功');
-    },
+    manual: true, onSuccess: () => message.success('关单成功'),
   });
 
   useEffect(() => {
     let u = params?.u;
     if (!u) return;
     getCashier.runAsync({ u });
-    let interval = setInterval(() => getCashier.run({ u }), 2.5 * 1000);
+    let interval = setInterval(() => data && getCashier.run({ u }), 2.5 * 1000);
     return () => clearInterval(interval);
   }, [params?.u]);
 
