@@ -74,7 +74,7 @@ const Index: React.FC<{}> = (props, ref) => {
 
   useEffect(() => {
     let u = params?.u;
-    if (!u) return;
+    if (!u) history.push({ pathname: '/404', query: { ...params } });
     getCashier.runAsync({ u });
     let interval = setInterval(() => data && getCashier.run({ u }), 2.5 * 1000);
     return () => clearInterval(interval);
@@ -134,8 +134,8 @@ const Index: React.FC<{}> = (props, ref) => {
       </div>
       <div className={styles.methodsToolbar}>
         <Space>
-          <a rel='noopener noreferrer' onClick={onClose}>取消交易</a>
-          <Button type='primary' onClick={onSubmit}>确认支付</Button>
+          <Button type='link' onClick={onClose} disabled={!!data}>取消交易</Button>
+          <Button type='primary' onClick={onSubmit} disabled={!!data}>确认支付</Button>
         </Space>
       </div>
     </div>

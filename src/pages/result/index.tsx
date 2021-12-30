@@ -30,7 +30,7 @@ const Index: React.FC<{}> = (props, ref) => {
 
   useEffect(() => {
     let u = params?.u;
-    if (!u) return;
+    if (!u) history.push({ pathname: '/404', query: { ...params } });
     getCashier.runAsync({ u });
     let interval = setInterval(() => data && getCashier.run({ u }), 2.5 * 1000);
     return () => clearInterval(interval);
