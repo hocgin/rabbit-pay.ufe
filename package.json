@@ -11,11 +11,14 @@
     "precommit": "lint-staged"
   },
   "dependencies": {
-    "@hocgin/ui": "latest",
-    "antd": "^4.8.2",
+    "@ahooksjs/use-url-state": "^3.1.2",
+    "@hocgin/ui": "^4.0.39",
+    "ahooks": "^3.1.3",
+    "antd": "^4.17.2",
     "classnames": "latest",
     "dva": "^2.6.0-beta.21",
     "hash.js": "latest",
+    "mockjs": "^1.1.0",
     "moment": "^2.29.1",
     "path-to-regexp": "^6.2.0",
     "prop-types": "^15.7.2",
@@ -24,6 +27,9 @@
     "react-dom": "^16.8.6"
   },
   "devDependencies": {
+    "@types/mockjs": "^1.0.4",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
     "@umijs/preset-react": "^1.6.19",
     "babel-eslint": "^9.0.0",
     "eslint": "^5.4.0",
@@ -35,7 +41,7 @@
     "husky": "^0.14.3",
     "lint-staged": "^7.2.2",
     "react-test-renderer": "^16.7.0",
-    "umi": "^3.2.27"
+    "umi": "^3.5.20"
   },
   "lint-staged": {
     "*.{js,jsx}": [

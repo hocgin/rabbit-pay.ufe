@@ -1,8 +1,9 @@
 // ref: https://umijs.org/config/
 import { defineConfig } from 'umi';
+import routerConfig from './config/router.config';
 
 export default defineConfig({
-  title: '收银台',
+  title: 'HOCGIN - 收银台',
   antd: {},
   dva: {},
   outputPath: './dist',
@@ -14,14 +15,8 @@ export default defineConfig({
       pathRewrite: { '^/api': '' },
     },
   },
-  routes: [
-    {
-      path: '/',
-      component: '@/layouts/index',
-      routes: [
-        { path: '/cashier', component: '@/pages/cashier/index' },
-        { path: '/cashier/result', component: '@/pages/cashier/result/index' },
-      ],
-    },
-  ],
+  theme: {
+    'primary-color': '#E24B3A',
+  },
+  routes: [...routerConfig],
 });
