@@ -134,8 +134,8 @@ const Index: React.FC<{}> = (props, ref) => {
       </div>
       <div className={styles.methodsToolbar}>
         <Space>
-          <Button type='link' onClick={onClose} disabled={!!data}>取消交易</Button>
-          <Button type='primary' onClick={onSubmit} disabled={!!data}>确认支付</Button>
+          <Button type='link' loading={closeTrade?.loading} onClick={onClose} disabled={data === undefined}>取消交易</Button>
+          <Button type='primary' loading={goPay?.loading} onClick={onSubmit} disabled={data === undefined}>确认支付</Button>
         </Space>
       </div>
     </div>
