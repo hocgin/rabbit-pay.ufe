@@ -45,6 +45,8 @@ jobs:
         run: npm install
       - name: Run build
         run: npm run build:cdn
+        env:
+          NODE_OPTIONS: '--max_old_space_size=4096'
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@main
         env:
