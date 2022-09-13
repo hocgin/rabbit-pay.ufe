@@ -1,15 +1,15 @@
-import { success } from '../utils/result';
+import MockKit from '@hocgin/mock-kit';
 import Mock from 'mockjs';
-import { amt, datetime } from '../utils/common';
-import { datadict } from '../utils/datadict';
-import { bmw_trade_order_status } from '../datadict';
+import {amt, datetime} from '../utils/common';
+import {datadict} from '../utils/datadict';
+import {bmw_trade_order_status} from '../datadict';
 
 export default {
-  'GET /api/bmw/cashier': (req: any, res: any) => {
+  'GET /api/pay/cashier': (req: any, res: any) => {
 
     let orderStatus = datadict(bmw_trade_order_status);
 
-    res.json(success(Mock.mock({
+    res.json(MockKit.success(Mock.mock({
       'tradeOrderId|+1': 1,
       outTradeNo: '@string(32)',
       tradeNo: '@string(32)',
@@ -41,10 +41,10 @@ export default {
       }],
     })));
   },
-  'POST /api/bmw/go-pay': (req: any, res: any) => {
-    return res.json(success());
+  'POST /api/pay/go-pay': (req: any, res: any) => {
+    return res.json(MockKit.success());
   },
-  'POST /api/bmw/close-trade': (req: any, res: any) => {
-    return res.json(success());
+  'POST /api/pay/close-trade': (req: any, res: any) => {
+    return res.json(MockKit.success());
   },
 };

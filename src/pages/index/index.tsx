@@ -1,15 +1,14 @@
 import * as React from 'react';
 import useUrlState from '@ahooksjs/use-url-state';
 import styles from './index.less';
-import { useEffect, useState } from 'react';
-import { useRequest } from 'ahooks';
-import { history } from 'umi';
-import { Money } from '@hocgin/ui';
+import {useState} from 'react';
+import {useInterval, useRequest} from 'ahooks';
 import TitleSpec from '@/components/TitleSpec';
-import bmwService from '@/services/bmw';
-import { Spin, Avatar, Row, Col, Space, Button, Modal, message } from 'antd';
+import bmwService from '@/services/pay';
+import {Spin, Avatar, Row, Col, Space, Button, Modal, message} from 'antd';
 import classnames from 'classnames';
-import { TrophyOutlined, PayCircleOutlined } from '@ant-design/icons';
+import {TrophyOutlined, PayCircleOutlined} from '@ant-design/icons';
+import {history} from "umi";
 
 const RadioOption: React.FC<{ src?: string, title?: string, checked?: boolean, onClick: any }> = ({
                                                                                                     src =
@@ -18,7 +17,7 @@ const RadioOption: React.FC<{ src?: string, title?: string, checked?: boolean, o
                                                                                                     title,
                                                                                                     checked = false,
                                                                                                     onClick,
-                                                                                                  }, ref) => {
+                                                                                                  }) => {
   return <div onClick={onClick} className={classnames(styles.radioOption, {
     [styles.checked]: checked,
   })}>
@@ -29,18 +28,20 @@ const RadioOption: React.FC<{ src?: string, title?: string, checked?: boolean, o
 
 
 const Index: React.FC<{}> = (props, ref) => {
-  const [params, setParams] = useUrlState({ u: undefined });
+  const [params] = useUrlState({u: undefined});
   let [more, setMore] = useState<boolean>(false);
-  let [data, setData] = useState<any>(undefined);
+  let [data, setData] = useState<any>();
   let [check, setCheck] = useState(0);
-  let getCashier = useRequest(bmwService.getCashier, {
-    manual: true,
+  if (!params?.u) {
+    history.push({pathname: '/404', query: {...params}});
+  }
+  let getCashier = useRequest(() => bmwService.getCashier(params.u), {
     onSuccess: (data: any) => {
       if (!data) {
-        history.push({ pathname: '/404', query: { ...params } });
+        history.push({pathname: '/404', query: {...params}});
       }
       if (data?.status !== 'processing') {
-        history.push({ pathname: '/result', query: { ...params } });
+        history.push({pathname: '/result', query: {...params}});
       }
       setData(data);
     },
@@ -71,16 +72,9 @@ const Index: React.FC<{}> = (props, ref) => {
   let closeTrade = useRequest(bmwService.closeTrade, {
     manual: true, onSuccess: () => message.success('关单成功'),
   });
+  useInterval(() => getCashier.run(), 2.5 * 1000);
 
-  useEffect(() => {
-    let u = params?.u;
-    if (!u) history.push({ pathname: '/404', query: { ...params } });
-    getCashier.runAsync({ u });
-    let interval = setInterval(() => data && getCashier.run({ u }), 2.5 * 1000);
-    return () => clearInterval(interval);
-  }, [params?.u]);
-
-  if (!data && getCashier?.loading) {
+  if (getCashier?.loading) {
     return <div className={classnames(styles.cashier, styles.center)}><Spin /></div>;
   }
   let payTypes = (data?.payTypes || []).map((item: any, index: number) => ({
@@ -88,16 +82,16 @@ const Index: React.FC<{}> = (props, ref) => {
     checked: check === index,
   }));
 
-  let checked = payTypes.filter(({ checked }: any) => checked);
+  let checked = payTypes.filter(({checked}: any) => checked);
 
   let onSubmit = () => {
-    goPay.run({ tradeOrderId: data?.tradeOrderId, paySceneId: data?.paySceneId, payType: checked[0]?.payType });
+    goPay.run({tradeOrderId: data?.tradeOrderId, paySceneId: data?.paySceneId, payType: checked[0]?.payType});
   };
 
   let onClose = () => {
     Modal.confirm({
       title: '确认关闭交易?',
-      onOk: () => closeTrade.run({ tradeOrderId: data?.tradeOrderId }),
+      onOk: () => closeTrade.run({tradeOrderId: data?.tradeOrderId}),
     });
   };
 
@@ -110,8 +104,8 @@ const Index: React.FC<{}> = (props, ref) => {
         <div className={styles.order}>
           <TitleSpec title='商户名称'>{data?.accessMchName}</TitleSpec>
           <TitleSpec title='商品名称'>{data?.orderTitle}</TitleSpec>
-          <TitleSpec title='交易金额'> <Money value={data?.tradeAmt} /></TitleSpec>
-          <TitleSpec title='付款账号'> {data?.userName}</TitleSpec>
+          <TitleSpec title='交易金额'>{data?.tradeAmt}</TitleSpec>
+          <TitleSpec title='付款账号'>{data?.userName}</TitleSpec>
           {more && (<>
             <TitleSpec title='订单描述'>{data?.orderDesc}</TitleSpec>
             <TitleSpec title='购买时间'> {data?.createdAt}</TitleSpec>
@@ -134,8 +128,9 @@ const Index: React.FC<{}> = (props, ref) => {
       </div>
       <div className={styles.methodsToolbar}>
         <Space>
-          <Button type='link' loading={closeTrade?.loading} onClick={onClose} disabled={data === undefined}>取消交易</Button>
-          <Button type='primary' loading={goPay?.loading} onClick={onSubmit} disabled={data === undefined}>确认支付</Button>
+          <Button type='link' loading={closeTrade?.loading} onClick={onClose}
+                  disabled={!data}>取消交易</Button>
+          <Button type='primary' loading={goPay?.loading} onClick={onSubmit} disabled={!data}>确认支付</Button>
         </Space>
       </div>
     </div>
