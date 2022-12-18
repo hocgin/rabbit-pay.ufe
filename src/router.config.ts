@@ -9,5 +9,5 @@ export default [
       {path: '/404', component: '@/pages/404'},
     ],
   },
-  {component: '@/pages/404'}
+  {redirect: '/404'}
 ];

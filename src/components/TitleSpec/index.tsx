@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import styles from './index.less';
 
 const Index: React.FC<{ title: string, children?: any }> = ({ title, children }, ref) => {
