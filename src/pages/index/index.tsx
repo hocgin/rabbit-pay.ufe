@@ -75,9 +75,6 @@ const Index: React.FC<{}> = (props, ref) => {
   });
   useInterval(() => getCashier.run(), 2.5 * 1000);
 
-  if (getCashier?.loading) {
-    return <div className={classnames(styles.cashier, styles.center)}><Spin/></div>;
-  }
   let payTypes = (data?.payTypes || []).map((item: any, index: number) => ({
     ...item,
     checked: check === index,
@@ -96,47 +93,51 @@ const Index: React.FC<{}> = (props, ref) => {
     });
   };
 
-  return (<div className={styles.cashier}>
+  return (<>
     {contextHolder}
-    <div className={styles.info}>
-      <div className={styles.head}>
-        <div className={styles.image}>
-          <Avatar shape={'square'} size={100} src={data?.imageUrl} icon={<TrophyOutlined/>}/>
+    <Spin spinning={getCashier?.loading} delay={500}>
+      <div className={styles.cashier}>
+        <div className={styles.info}>
+          <div className={styles.head}>
+            <div className={styles.image}>
+              <Avatar shape={'square'} size={100} src={data?.imageUrl} icon={<TrophyOutlined/>}/>
+            </div>
+            <div className={styles.order}>
+              <TitleSpec title='商户名称'>{data?.accessMchName}</TitleSpec>
+              <TitleSpec title='商品名称'>{data?.orderTitle}</TitleSpec>
+              <TitleSpec title='交易金额'>{data?.tradeAmt}</TitleSpec>
+              <TitleSpec title='付款账号'>{data?.userName}</TitleSpec>
+              {more && (<>
+                <TitleSpec title='订单描述'>{data?.orderDesc}</TitleSpec>
+                <TitleSpec title='购买时间'> {data?.createdAt}</TitleSpec>
+                <TitleSpec title='关单时间'>{data?.planCloseAt}</TitleSpec>
+                <TitleSpec title='交易号'>{data?.tradeNo}</TitleSpec>
+              </>)}
+              <a className={styles.toolbar} onClick={() => setMore(!more)}>{more ? '收起' : '展开'}</a>
+            </div>
+          </div>
         </div>
-        <div className={styles.order}>
-          <TitleSpec title='商户名称'>{data?.accessMchName}</TitleSpec>
-          <TitleSpec title='商品名称'>{data?.orderTitle}</TitleSpec>
-          <TitleSpec title='交易金额'>{data?.tradeAmt}</TitleSpec>
-          <TitleSpec title='付款账号'>{data?.userName}</TitleSpec>
-          {more && (<>
-            <TitleSpec title='订单描述'>{data?.orderDesc}</TitleSpec>
-            <TitleSpec title='购买时间'> {data?.createdAt}</TitleSpec>
-            <TitleSpec title='关单时间'>{data?.planCloseAt}</TitleSpec>
-            <TitleSpec title='交易号'>{data?.tradeNo}</TitleSpec>
-          </>)}
-          <a className={styles.toolbar} onClick={() => setMore(!more)}>{more ? '收起' : '展开'}</a>
+        <div className={styles.methods}>
+          <div className={styles.title}>支付方式</div>
+          <div className={styles.options}>
+            <Row gutter={[10, 10]}>
+              {payTypes.map((item: any, index: number) => <Col md={6} xs={24}>
+                <RadioOption src={item.imageUrl} title={item.title} checked={item.checked}
+                             onClick={() => setCheck(index)}/>
+              </Col>)}
+            </Row>
+          </div>
+          <div className={styles.methodsToolbar}>
+            <Space>
+              <Button type='link' loading={closeTrade?.loading} onClick={onClose}
+                      disabled={!data}>取消交易</Button>
+              <Button type='primary' loading={goPay?.loading} onClick={onSubmit} disabled={!data}>确认支付</Button>
+            </Space>
+          </div>
         </div>
       </div>
-    </div>
-    <div className={styles.methods}>
-      <div className={styles.title}>支付方式</div>
-      <div className={styles.options}>
-        <Row gutter={[10, 10]}>
-          {payTypes.map((item: any, index: number) => <Col md={6} xs={24}>
-            <RadioOption src={item.imageUrl} title={item.title} checked={item.checked}
-                         onClick={() => setCheck(index)}/>
-          </Col>)}
-        </Row>
-      </div>
-      <div className={styles.methodsToolbar}>
-        <Space>
-          <Button type='link' loading={closeTrade?.loading} onClick={onClose}
-                  disabled={!data}>取消交易</Button>
-          <Button type='primary' loading={goPay?.loading} onClick={onSubmit} disabled={!data}>确认支付</Button>
-        </Space>
-      </div>
-    </div>
-  </div>);
+    </Spin>
+  </>);
 };
 
 export default Index;

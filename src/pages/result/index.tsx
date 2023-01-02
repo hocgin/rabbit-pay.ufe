@@ -26,9 +26,6 @@ const Index: React.FC<{}> = () => {
   });
   useInterval(() => getCashier.run(), 2.5 * 1000);
 
-  if (getCashier?.loading) {
-    return <div className={classnames(styles.page, styles.center)}><Spin/></div>;
-  }
   let statusArr: any = {'processing': 'info', 'payed': 'success', 'cancelled': 'info', 'closed': 'info'};
   let titleArr: any = {'processing': '进行中', 'payed': '支付成功', 'cancelled': '已取消', 'closed': '已关闭'};
   let status = statusArr?.[data?.status] ?? 'info';
@@ -58,20 +55,24 @@ const Index: React.FC<{}> = () => {
     window.close();
   };
 
-  return (<div className={styles.page}>
+  return (<>
     {contextHolder}
-    <div className={styles.result}>
-      {data ? (<Result status={status} title={title} subTitle={`交易单号: ${data?.outTradeNo}`}
-                       extra={[backBtn, <Button onClick={onClickClose}>关闭窗口</Button>]}>
-        {isClosed && (<div className='desc'>
-          <Typography.Paragraph>
-            <Text strong className={styles.closeReason}>关单原因: </Text>
-          </Typography.Paragraph>
-          <Typography.Paragraph> {data?.reason || '系统关单'} </Typography.Paragraph>
-        </div>)}
-      </Result>) : (<Empty description={'支付单据不存在或已过期'}/>)}
-    </div>
-  </div>);
+    <Spin spinning={getCashier?.loading} delay={500}>
+      <div className={styles.page}>
+        <div className={styles.result}>
+          {data ? (<Result status={status} title={title} subTitle={`交易单号: ${data?.outTradeNo}`}
+                           extra={[backBtn, <Button onClick={onClickClose}>关闭窗口</Button>]}>
+            {isClosed && (<div className='desc'>
+              <Typography.Paragraph>
+                <Text strong className={styles.closeReason}>关单原因: </Text>
+              </Typography.Paragraph>
+              <Typography.Paragraph> {data?.reason || '系统关单'} </Typography.Paragraph>
+            </div>)}
+          </Result>) : (<Empty description={'支付单据不存在或已过期'}/>)}
+        </div>
+      </div>
+    </Spin>
+  </>);
 };
 
 export default Index;

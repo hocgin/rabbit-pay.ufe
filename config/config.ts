@@ -1,5 +1,9 @@
 import {defineConfig} from 'umi';
 import routerConfig from '../src/router.config';
+import {theme} from 'antd';
+
+const {defaultAlgorithm, defaultSeed} = theme;
+const mapToken = defaultAlgorithm(defaultSeed);
 
 export const useLogger = () => {
   let result: any = [];
@@ -14,9 +18,8 @@ export const useLogger = () => {
   return result;
 };
 
-
 export default defineConfig({
-  title: 'HOCGIN - 收银台',
+  title: '收银台',
   locale: {
     antd: true,
   },
@@ -39,11 +42,15 @@ export default defineConfig({
       pathRewrite: {'^/api': ''},
     },
   },
-  theme: {
-    '@primary-color': '#E24B3A',
-  },
+  theme: {},
   routes: [...routerConfig],
   extraBabelPlugins: [
     ...useLogger(),
   ],
+  lessLoader: {
+    modifyVars: {
+      ...mapToken,
+      // 'ant-prefix': ANT_PREFIX_CLS,
+    },
+  },
 });

@@ -1,16 +1,15 @@
 import styles from './index.less';
 import React from 'react';
-import {ConfigProvider} from 'antd';
 import {Footer, Header} from '@hocgin/ui';
-import zhCN from 'antd/lib/locale/zh_CN';
+import {Theme} from '@/components';
 
-const BasicLayout: React.FC<{}> = ({children}) => {
-  return (<ConfigProvider locale={zhCN}>
+const BasicLayout: React.FC<{}> = ({children}: any) => {
+  return (<Theme>
     <div className={styles.normal}>
       <Header logo={<Header.TextLogo title={'收银台'}/>}/>
-      {children}
+      <div style={{flex: '1 1'}}>{children}</div>
       <Footer/>
     </div>
-  </ConfigProvider>);
+  </Theme>);
 };
 export default BasicLayout;
